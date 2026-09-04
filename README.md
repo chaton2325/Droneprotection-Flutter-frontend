@@ -26,22 +26,23 @@ sur l'[interface web](../Droneprotection-Web-Interface), avec envoi automatique 
 
 ## Configuration du backend
 
-Par defaut, l'app cible un backend local :
+Par defaut, l'app cible le backend de production :
 
 ```
-API_BASE_URL = http://10.0.2.2:4000/api   // emulateur Android -> hote local
-SOCKET_URL   = http://10.0.2.2:4000
+API_BASE_URL = https://antitheft.mirhosty.com/api
+SOCKET_URL   = https://antitheft.mirhosty.com
 ```
 
-- **Emulateur Android** : valeurs par defaut, rien a changer (`10.0.2.2` pointe vers `localhost`
-  de la machine hote).
-- **Simulateur iOS** : `flutter run --dart-define=API_BASE_URL=http://localhost:4000/api --dart-define=SOCKET_URL=http://localhost:4000`
-- **Appareil physique** (meme reseau Wi-Fi que votre machine) :
-  ```bash
-  flutter run \
-    --dart-define=API_BASE_URL=http://<IP-LAN-DE-VOTRE-PC>:4000/api \
-    --dart-define=SOCKET_URL=http://<IP-LAN-DE-VOTRE-PC>:4000
-  ```
+- **Backend de production** : valeurs par defaut, rien a changer.
+- **Backend local** (dev) : surcharger via `--dart-define` :
+  - **Emulateur Android** : `--dart-define=API_BASE_URL=http://10.0.2.2:4000/api --dart-define=SOCKET_URL=http://10.0.2.2:4000`
+  - **Simulateur iOS / Desktop / Web** : `--dart-define=API_BASE_URL=http://localhost:4000/api --dart-define=SOCKET_URL=http://localhost:4000`
+  - **Appareil physique** (meme reseau Wi-Fi que votre machine) :
+    ```bash
+    flutter run \
+      --dart-define=API_BASE_URL=http://<IP-LAN-DE-VOTRE-PC>:4000/api \
+      --dart-define=SOCKET_URL=http://<IP-LAN-DE-VOTRE-PC>:4000
+    ```
 
 Voir `lib/config.dart`.
 
