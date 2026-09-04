@@ -15,6 +15,7 @@ class AppUser {
 
   bool get canTrigger => role == 'victim' || role == 'both';
   bool get canRespond => role == 'responder' || role == 'both';
+  bool get isAdmin => role == 'admin';
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
     return AppUser(
