@@ -1,36 +1,24 @@
-import 'package:flutter/foundation.dart'
-    show TargetPlatform, defaultTargetPlatform, kIsWeb;
-
 /// Configuration reseau de l'application.
 ///
-/// Cible actuellement le backend local (`npm run dev` dans
-/// Droneprotection-Backend, port 4000) pour les tests en cours, connecte a la
-/// vraie base PostgreSQL de production (VPS EBYA). Pour revenir au backend
-/// deploye (`https://antitheft.mirhosty.com`), surcharger sans recompiler :
-/// `flutter run --dart-define=API_BASE_URL=https://antitheft.mirhosty.com/api --dart-define=SOCKET_URL=https://antitheft.mirhosty.com`
+/// Par defaut on cible le backend de production :
+/// - `https://antitheft.mirhosty.com` (HTTPS)
+///
+/// Ces valeurs peuvent etre surchargees sans recompiler le code source, par
+/// exemple pour pointer vers un backend local en developpement :
+/// `flutter run --dart-define=API_BASE_URL=http://localhost:4000/api --dart-define=SOCKET_URL=http://localhost:4000`
 ///
 /// Sur emulateur Android, `localhost` designe l'emulateur lui-meme (pas la
-/// machine hote) : on bascule automatiquement sur l'alias `10.0.2.2` dans ce
-/// cas precis tant qu'aucune valeur n'est fournie via --dart-define. Un
-/// appareil Android physique doit toujours surcharger explicitement avec
-/// l'IP LAN de la machine hote (indetectable automatiquement).
+/// machine hote) : utiliser `--dart-define=API_BASE_URL=http://10.0.2.2:4000/api --dart-define=SOCKET_URL=http://10.0.2.2:4000`
 class AppConfig {
-  static const String _apiBaseUrlOverride = String.fromEnvironment(
+  static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
+    defaultValue: 'https://antitheft.mirhosty.com/api',
   );
-  static const String _socketUrlOverride = String.fromEnvironment('SOCKET_URL');
 
-  static bool get _isAndroid =>
-      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
-  static String get _localHost => _isAndroid ? '10.0.2.2' : 'localhost';
-
-  static String get apiBaseUrl => _apiBaseUrlOverride.isNotEmpty
-      ? _apiBaseUrlOverride
-      : 'http://$_localHost:4000/api';
-
-  static String get socketUrl => _socketUrlOverride.isNotEmpty
-      ? _socketUrlOverride
-      : 'http://$_localHost:4000';
+  static const String socketUrl = String.fromEnvironment(
+    'SOCKET_URL',
+    defaultValue: 'https://antitheft.mirhosty.com',
+  );
 
   /// Intervalle d'envoi de la position pendant une alerte active.
   static const Duration locationUpdateInterval = Duration(seconds: 6);
