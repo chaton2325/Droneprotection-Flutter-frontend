@@ -26,7 +26,9 @@ class _HistoryTabState extends State<HistoryTab> {
     final alertProvider = context.watch<AlertProvider>();
 
     if (alertProvider.loadingHistory && alertProvider.history.isEmpty) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.brand500));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.brand500),
+      );
     }
 
     if (alertProvider.history.isEmpty) {
@@ -36,7 +38,11 @@ class _HistoryTabState extends State<HistoryTab> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.history_rounded, color: AppColors.textSecondary, size: 40),
+              const Icon(
+                Icons.history_rounded,
+                color: AppColors.textSecondary,
+                size: 40,
+              ),
               const SizedBox(height: 12),
               const Text(
                 "Aucune alerte pour l'instant.",
@@ -70,17 +76,26 @@ class _HistoryTabState extends State<HistoryTab> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Alerte #${alert.id}', style: const TextStyle(fontWeight: FontWeight.w700)),
+                      Text(
+                        'Alerte #${alert.id}',
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
                       const SizedBox(height: 4),
                       Text(
                         timeAgo(alert.createdAt),
-                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12.5,
+                        ),
                       ),
                       if (alert.responderName != null) ...[
                         const SizedBox(height: 4),
                         Text(
                           'Pris en charge par ${alert.responderName}',
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12.5,
+                          ),
                         ),
                       ],
                     ],

@@ -11,6 +11,7 @@ class EmergencyAlert {
   final int? acceptedBy;
   final String? responderName;
   final String? responderPhone;
+  final String? responderAvatarUrl;
   final String? acceptedAt;
   final String? resolvedAt;
   final String createdAt;
@@ -31,6 +32,7 @@ class EmergencyAlert {
     this.acceptedBy,
     this.responderName,
     this.responderPhone,
+    this.responderAvatarUrl,
     this.acceptedAt,
     this.resolvedAt,
   });
@@ -56,6 +58,7 @@ class EmergencyAlert {
       acceptedBy: json['accepted_by'] as int?,
       responderName: json['responder_name'] as String?,
       responderPhone: json['responder_phone'] as String?,
+      responderAvatarUrl: json['responder_avatar_url'] as String?,
       acceptedAt: json['accepted_at'] as String?,
       resolvedAt: json['resolved_at'] as String?,
       createdAt: json['created_at'] as String,

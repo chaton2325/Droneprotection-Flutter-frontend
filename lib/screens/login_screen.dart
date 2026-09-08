@@ -55,10 +55,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       end: Alignment.bottomRight,
                     ),
                     boxShadow: [
-                      BoxShadow(color: AppColors.brand600.withValues(alpha: 0.4), blurRadius: 24),
+                      BoxShadow(
+                        color: AppColors.brand600.withValues(alpha: 0.4),
+                        blurRadius: 24,
+                      ),
                     ],
                   ),
-                  child: const Icon(Icons.shield_rounded, color: Colors.white, size: 32),
+                  child: const Icon(
+                    Icons.shield_rounded,
+                    color: Colors.white,
+                    size: 32,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 const Text(
@@ -68,15 +75,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 6),
                 const Text(
                   'Connectez-vous pour pouvoir declencher une alerte d\'urgence en un geste.',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.4),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(labelText: 'Email'),
-                  validator: (value) =>
-                      (value == null || !value.contains('@')) ? 'Email invalide' : null,
+                  validator: (value) => (value == null || !value.contains('@'))
+                      ? 'Email invalide'
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -85,12 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                     labelText: 'Mot de passe',
                     suffixIcon: IconButton(
-                      icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility, size: 20),
+                      icon: Icon(
+                        _obscure ? Icons.visibility_off : Icons.visibility,
+                        size: 20,
+                      ),
                       onPressed: () => setState(() => _obscure = !_obscure),
                     ),
                   ),
-                  validator: (value) =>
-                      (value == null || value.isEmpty) ? 'Mot de passe requis' : null,
+                  validator: (value) => (value == null || value.isEmpty)
+                      ? 'Mot de passe requis'
+                      : null,
                 ),
                 if (auth.errorMessage != null) ...[
                   const SizedBox(height: 16),
@@ -98,12 +114,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppColors.brand500.withValues(alpha: 0.1),
-                      border: Border.all(color: AppColors.brand500.withValues(alpha: 0.3)),
+                      border: Border.all(
+                        color: AppColors.brand500.withValues(alpha: 0.3),
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       auth.errorMessage!,
-                      style: const TextStyle(color: AppColors.brand400, fontSize: 13),
+                      style: const TextStyle(
+                        color: AppColors.brand400,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ],

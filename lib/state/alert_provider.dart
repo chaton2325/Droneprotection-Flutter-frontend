@@ -4,6 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../config.dart';
 import '../models/alert.dart';
 import '../services/alert_service.dart';
+import '../services/audio_stream_service.dart';
 import '../services/location_service.dart';
 import '../services/socket_service.dart';
 
@@ -11,11 +12,13 @@ class AlertProvider extends ChangeNotifier {
   final AlertService alertService;
   final LocationService locationService;
   final SocketService socketService;
+  final AudioStreamService audioStreamService;
 
   AlertProvider({
     required this.alertService,
     required this.locationService,
     required this.socketService,
+    required this.audioStreamService,
   });
 
   EmergencyAlert? current;
@@ -24,6 +27,12 @@ class AlertProvider extends ChangeNotifier {
   bool triggering = false;
   bool loadingHistory = false;
   String? errorMessage;
+
+  // Micro ouvert automatiquement des qu'un repondant accepte l'alerte (voir
+  // AudioStreamService) : indique si le flux est actif pour l'UI, et une
+  // erreur non bloquante (ex: permission micro refusee).
+  bool micActive = false;
+  String? micErrorMessage;
 
   Timer? _locationTimer;
   io.Socket? _boundSocket;
@@ -46,11 +55,65 @@ class AlertProvider extends ChangeNotifier {
     final alert = EmergencyAlert.fromJson(Map<String, dynamic>.from(data));
     if (current == null || alert.id != current!.id) return;
 
+    final wasAccepted = current!.status == 'accepted';
     current = alert;
+
+    if (!wasAccepted && alert.status == 'accepted') {
+      _startAudioStream(alert.id);
+    }
     if (!alert.isActive) {
       _stopLocationLoop();
+      _stopAudioStream();
     }
     notifyListeners();
+  }
+
+  Future<void> _startAudioStream(int alertId) async {
+    micErrorMessage = null;
+    try {
+      final started = await audioStreamService.start(alertId);
+      micActive = started;
+      if (!started) {
+        micErrorMessage =
+            "Micro indisponible (permission refusee ?) - le repondant n'entendra pas l'audio.";
+      }
+    } catch (_) {
+      micActive = false;
+      micErrorMessage = "Impossible d'ouvrir le micro.";
+    }
+    notifyListeners();
+  }
+
+  Future<void> _stopAudioStream() async {
+    if (!micActive) return;
+    await audioStreamService.stop();
+    micActive = false;
+    notifyListeners();
+  }
+
+  /// Recupere l'alerte active de l'utilisateur depuis le backend, si elle existe.
+  ///
+  /// Necessaire car [current] ne vit qu'en memoire : si le telephone s'eteint
+  /// (batterie, redemarrage...) pendant qu'une alerte est en cours, l'app perd
+  /// cet etat au relancement et affiche a nouveau le bouton SOS normal alors
+  /// que l'alerte est toujours active cote backend et suivie par les
+  /// repondants. On la restaure ici et on reprend l'envoi de position.
+  Future<void> restoreActiveAlert() async {
+    if (current != null) return;
+    try {
+      final mine = await alertService.listMine();
+      final active = mine.where((a) => a.isActive);
+      if (active.isEmpty) return;
+      current =
+          active.first; // listMine() est trie created_at DESC cote backend.
+      _startLocationLoop();
+      if (current!.status == 'accepted') {
+        _startAudioStream(current!.id);
+      }
+      notifyListeners();
+    } catch (_) {
+      // Pas de reseau au demarrage : on retentera au prochain appel (ex: reouverture de l'onglet).
+    }
   }
 
   Future<bool> triggerAlert({String? message}) async {
@@ -80,7 +143,9 @@ class AlertProvider extends ChangeNotifier {
 
   void _startLocationLoop() {
     _stopLocationLoop();
-    _locationTimer = Timer.periodic(AppConfig.locationUpdateInterval, (_) async {
+    _locationTimer = Timer.periodic(AppConfig.locationUpdateInterval, (
+      _,
+    ) async {
       final alert = current;
       if (alert == null || !alert.isActive) {
         _stopLocationLoop();
@@ -112,6 +177,7 @@ class AlertProvider extends ChangeNotifier {
     if (alert == null) return;
     current = await alertService.cancel(alert.id);
     _stopLocationLoop();
+    _stopAudioStream();
     notifyListeners();
   }
 
@@ -120,12 +186,14 @@ class AlertProvider extends ChangeNotifier {
     if (alert == null) return;
     current = await alertService.resolve(alert.id);
     _stopLocationLoop();
+    _stopAudioStream();
     notifyListeners();
   }
 
   void clearCurrent() {
     current = null;
     _stopLocationLoop();
+    _stopAudioStream();
     notifyListeners();
   }
 
@@ -144,6 +212,7 @@ class AlertProvider extends ChangeNotifier {
 
   void reset() {
     _stopLocationLoop();
+    _stopAudioStream();
     _boundSocket = null;
     current = null;
     history = [];
@@ -152,6 +221,7 @@ class AlertProvider extends ChangeNotifier {
   @override
   void dispose() {
     _stopLocationLoop();
+    audioStreamService.dispose();
     super.dispose();
   }
 }

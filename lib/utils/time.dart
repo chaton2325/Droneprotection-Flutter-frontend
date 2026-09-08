@@ -1,8 +1,13 @@
-/// Les dates renvoyees par le backend (SQLite `datetime('now')`) sont en UTC
-/// mais sans suffixe de timezone, d'ou le parsing manuel ci-dessous.
-DateTime? _parseUtc(String? sqliteDate) {
-  if (sqliteDate == null) return null;
-  return DateTime.tryParse('${sqliteDate.replaceFirst(' ', 'T')}Z');
+/// Le backend (PostgreSQL, `now()`) renvoie des dates ISO 8601 avec suffixe
+/// de timezone (ex: `2026-09-08T17:55:38.665Z`), deja exploitables telles
+/// quelles. On garde un filet de securite pour un ancien format sans
+/// timezone (ex: `2026-09-08 17:55:38`, style SQLite) au cas ou.
+final _hasTimezone = RegExp(r'(Z|[+-]\d{2}:?\d{2})$');
+
+DateTime? _parseUtc(String? isoDate) {
+  if (isoDate == null) return null;
+  if (_hasTimezone.hasMatch(isoDate)) return DateTime.tryParse(isoDate);
+  return DateTime.tryParse('${isoDate.replaceFirst(' ', 'T')}Z');
 }
 
 String timeAgo(String? sqliteDate) {

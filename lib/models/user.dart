@@ -4,6 +4,7 @@ class AppUser {
   final String email;
   final String? phone;
   final String role;
+  final String? avatarUrl;
 
   const AppUser({
     required this.id,
@@ -11,6 +12,7 @@ class AppUser {
     required this.email,
     required this.role,
     this.phone,
+    this.avatarUrl,
   });
 
   bool get canTrigger => role == 'victim' || role == 'both';
@@ -24,6 +26,7 @@ class AppUser {
       email: json['email'] as String,
       phone: json['phone'] as String?,
       role: json['role'] as String,
+      avatarUrl: json['avatar_url'] as String?,
     );
   }
 
@@ -34,6 +37,7 @@ class AppUser {
       'email': email,
       'phone': phone,
       'role': role,
+      'avatar_url': avatarUrl,
     };
   }
 }

@@ -11,12 +11,15 @@ class AlertService {
     double? accuracy,
     String? message,
   }) async {
-    final data = await _client.post('/alerts', body: {
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
-      if (accuracy != null) 'accuracy': accuracy,
-      if (message != null) 'message': message,
-    });
+    final data = await _client.post(
+      '/alerts',
+      body: {
+        if (latitude != null) 'latitude': latitude,
+        if (longitude != null) 'longitude': longitude,
+        if (accuracy != null) 'accuracy': accuracy,
+        if (message != null) 'message': message,
+      },
+    );
     return EmergencyAlert.fromJson(data['alert']);
   }
 
@@ -26,11 +29,14 @@ class AlertService {
     required double longitude,
     double? accuracy,
   }) async {
-    final data = await _client.post('/alerts/$alertId/location', body: {
-      'latitude': latitude,
-      'longitude': longitude,
-      if (accuracy != null) 'accuracy': accuracy,
-    });
+    final data = await _client.post(
+      '/alerts/$alertId/location',
+      body: {
+        'latitude': latitude,
+        'longitude': longitude,
+        if (accuracy != null) 'accuracy': accuracy,
+      },
+    );
     return EmergencyAlert.fromJson(data['alert']);
   }
 

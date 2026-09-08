@@ -98,6 +98,20 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> uploadAvatar(
+    List<int> fileBytes,
+    String filename,
+    String mimeType,
+  ) async {
+    user = await authService.uploadAvatar(fileBytes, filename, mimeType);
+    notifyListeners();
+  }
+
+  Future<void> removeAvatar() async {
+    user = await authService.removeAvatar();
+    notifyListeners();
+  }
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);

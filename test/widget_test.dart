@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:drone_protection/app.dart';
 import 'package:drone_protection/services/alert_service.dart';
 import 'package:drone_protection/services/api_client.dart';
+import 'package:drone_protection/services/audio_stream_service.dart';
 import 'package:drone_protection/services/auth_service.dart';
 import 'package:drone_protection/services/location_service.dart';
 import 'package:drone_protection/services/socket_service.dart';
@@ -14,7 +15,9 @@ import 'package:drone_protection/state/alert_provider.dart';
 import 'package:drone_protection/state/auth_provider.dart';
 
 void main() {
-  testWidgets('affiche le formulaire de connexion par defaut', (WidgetTester tester) async {
+  testWidgets('affiche le formulaire de connexion par defaut', (
+    WidgetTester tester,
+  ) async {
     final apiClient = ApiClient();
     final socketService = SocketService();
     final authProvider = AuthProvider(
@@ -32,6 +35,7 @@ void main() {
               alertService: AlertService(apiClient),
               locationService: LocationService(),
               socketService: socketService,
+              audioStreamService: AudioStreamService(socketService),
             ),
           ),
         ],

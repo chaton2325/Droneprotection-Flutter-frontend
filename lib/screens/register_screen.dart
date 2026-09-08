@@ -30,7 +30,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       title: 'Repondant',
       desc: 'Recevoir les alertes (via l\'interface web).',
     ),
-    (value: 'both', title: 'Les deux', desc: 'Declencher et recevoir des alertes.'),
+    (
+      value: 'both',
+      title: 'Les deux',
+      desc: 'Declencher et recevoir des alertes.',
+    ),
   ];
 
   @override
@@ -71,22 +75,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _nameCtrl,
                   decoration: const InputDecoration(labelText: 'Nom complet'),
-                  validator: (value) =>
-                      (value == null || value.trim().isEmpty) ? 'Nom requis' : null,
+                  validator: (value) => (value == null || value.trim().isEmpty)
+                      ? 'Nom requis'
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(labelText: 'Email'),
-                  validator: (value) =>
-                      (value == null || !value.contains('@')) ? 'Email invalide' : null,
+                  validator: (value) => (value == null || !value.contains('@'))
+                      ? 'Email invalide'
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _phoneCtrl,
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(labelText: 'Telephone (optionnel)'),
+                  decoration: const InputDecoration(
+                    labelText: 'Telephone (optionnel)',
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -98,7 +106,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       : null,
                 ),
                 const SizedBox(height: 20),
-                const Text('Role', style: TextStyle(fontWeight: FontWeight.w700)),
+                const Text(
+                  'Role',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
                 const SizedBox(height: 8),
                 ..._roles.map((role) {
                   final selected = _role == role.value;
@@ -115,14 +126,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               : AppColors.surface2,
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                            color: selected ? AppColors.brand500 : AppColors.border,
+                            color: selected
+                                ? AppColors.brand500
+                                : AppColors.border,
                           ),
                         ),
                         child: Row(
                           children: [
                             Icon(
-                              selected ? Icons.radio_button_checked : Icons.radio_button_off,
-                              color: selected ? AppColors.brand500 : AppColors.textSecondary,
+                              selected
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_off,
+                              color: selected
+                                  ? AppColors.brand500
+                                  : AppColors.textSecondary,
                               size: 20,
                             ),
                             const SizedBox(width: 12),
@@ -130,8 +147,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(role.title,
-                                      style: const TextStyle(fontWeight: FontWeight.w700)),
+                                  Text(
+                                    role.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                                   Text(
                                     role.desc,
                                     style: const TextStyle(
@@ -154,12 +175,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppColors.brand500.withValues(alpha: 0.1),
-                      border: Border.all(color: AppColors.brand500.withValues(alpha: 0.3)),
+                      border: Border.all(
+                        color: AppColors.brand500.withValues(alpha: 0.3),
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       auth.errorMessage!,
-                      style: const TextStyle(color: AppColors.brand400, fontSize: 13),
+                      style: const TextStyle(
+                        color: AppColors.brand400,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ],

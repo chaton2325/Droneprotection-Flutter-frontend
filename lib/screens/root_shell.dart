@@ -5,6 +5,7 @@ import '../state/auth_provider.dart';
 import '../theme/app_theme.dart';
 import 'emergency_tab.dart';
 import 'history_tab.dart';
+import 'settings_tab.dart';
 
 class RootShell extends StatefulWidget {
   const RootShell({super.key});
@@ -20,13 +21,10 @@ class _RootShellState extends State<RootShell> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AlertProvider>().attachSocket();
+      final alertProvider = context.read<AlertProvider>();
+      alertProvider.attachSocket();
+      alertProvider.restoreActiveAlert();
     });
-  }
-
-  Future<void> _logout() async {
-    context.read<AlertProvider>().reset();
-    await context.read<AuthProvider>().logout();
   }
 
   @override
@@ -48,33 +46,36 @@ class _RootShellState extends State<RootShell> {
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: const Icon(Icons.shield_rounded, color: Colors.white, size: 18),
+              child: const Icon(
+                Icons.shield_rounded,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Drone Protection', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                const Text(
+                  'Drone Protection',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                ),
                 if (user != null)
                   Text(
                     user.fullName,
-                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
               ],
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            tooltip: 'Deconnexion',
-            onPressed: _logout,
-            icon: const Icon(Icons.logout_rounded),
-          ),
-        ],
       ),
       body: IndexedStack(
         index: _tabIndex,
-        children: const [EmergencyTab(), HistoryTab()],
+        children: const [EmergencyTab(), HistoryTab(), SettingsTab()],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tabIndex,
@@ -82,8 +83,18 @@ class _RootShellState extends State<RootShell> {
         backgroundColor: AppColors.surface,
         indicatorColor: AppColors.brand500.withValues(alpha: 0.18),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.warning_amber_rounded), label: 'Urgence'),
-          NavigationDestination(icon: Icon(Icons.history_rounded), label: 'Historique'),
+          NavigationDestination(
+            icon: Icon(Icons.warning_amber_rounded),
+            label: 'Urgence',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.history_rounded),
+            label: 'Historique',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_rounded),
+            label: 'Reglages',
+          ),
         ],
       ),
     );

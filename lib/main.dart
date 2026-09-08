@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'app.dart';
 import 'services/alert_service.dart';
 import 'services/api_client.dart';
+import 'services/audio_stream_service.dart';
 import 'services/auth_service.dart';
 import 'services/location_service.dart';
 import 'services/socket_service.dart';
@@ -30,6 +31,7 @@ void main() {
             alertService: AlertService(apiClient),
             locationService: LocationService(),
             socketService: socketService,
+            audioStreamService: AudioStreamService(socketService),
           ),
         ),
       ],

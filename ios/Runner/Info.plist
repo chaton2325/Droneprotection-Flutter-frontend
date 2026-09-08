@@ -49,6 +49,10 @@
 	<string>Drone Protection a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Drone Protection a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Drone Protection ouvre votre micro pendant une intervention acceptee pour que le repondant entende ce qui se passe.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Drone Protection a besoin d'acceder a vos photos pour definir votre photo de profil.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>

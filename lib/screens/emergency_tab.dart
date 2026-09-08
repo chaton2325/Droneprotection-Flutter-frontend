@@ -23,7 +23,8 @@ class EmergencyTab extends StatelessWidget {
                 children: [
                   SosButton(
                     busy: alertProvider.triggering,
-                    onConfirmed: () => context.read<AlertProvider>().triggerAlert(),
+                    onConfirmed: () =>
+                        context.read<AlertProvider>().triggerAlert(),
                   ),
                   const SizedBox(height: 28),
                   const Text(
@@ -35,7 +36,10 @@ class EmergencyTab extends StatelessWidget {
                     "En cas de danger, maintenez appuye pour declencher une alerte.\n"
                     'Votre position sera envoyee automatiquement a tous les repondants inscrits.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.textSecondary, height: 1.4),
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      height: 1.4,
+                    ),
                   ),
                   if (alertProvider.errorMessage != null) ...[
                     const SizedBox(height: 20),
@@ -43,13 +47,18 @@ class EmergencyTab extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: AppColors.brand500.withValues(alpha: 0.1),
-                        border: Border.all(color: AppColors.brand500.withValues(alpha: 0.3)),
+                        border: Border.all(
+                          color: AppColors.brand500.withValues(alpha: 0.3),
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         alertProvider.errorMessage!,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.brand400, fontSize: 13),
+                        style: const TextStyle(
+                          color: AppColors.brand400,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
                   ],
