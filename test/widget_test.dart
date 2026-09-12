@@ -39,7 +39,7 @@ void main() {
             ),
           ),
         ],
-        child: const DroneProtectionApp(),
+        child: const DronaidApp(),
       ),
     );
 

@@ -57,7 +57,7 @@ class _RootShellState extends State<RootShell> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Drone Protection',
+                  'Drone Aid Security',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
                 ),
                 if (user != null)

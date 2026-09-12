@@ -6,13 +6,13 @@ import 'screens/splash_screen.dart';
 import 'state/auth_provider.dart';
 import 'theme/app_theme.dart';
 
-class DroneProtectionApp extends StatelessWidget {
-  const DroneProtectionApp({super.key});
+class DronaidApp extends StatelessWidget {
+  const DronaidApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Drone Protection',
+      title: 'Drone Aid Security',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
       darkTheme: AppTheme.dark,

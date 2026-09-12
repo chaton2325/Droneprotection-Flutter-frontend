@@ -125,16 +125,21 @@ class _SosButtonState extends State<SosButton> with TickerProviderStateMixin {
                                 Icon(
                                   Icons.warning_rounded,
                                   color: Colors.white,
-                                  size: 44,
+                                  size: 36,
                                 ),
-                                SizedBox(height: 6),
-                                Text(
-                                  'SOS',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 28,
-                                    letterSpacing: 3,
+                                SizedBox(height: 8),
+                                SizedBox(
+                                  width: 128,
+                                  child: Text(
+                                    'Appuyez ici et maintenez',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 13,
+                                      height: 1.25,
+                                      letterSpacing: 0.2,
+                                    ),
                                   ),
                                 ),
                               ],

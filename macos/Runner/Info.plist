@@ -29,8 +29,8 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Drone Protection ouvre votre micro pendant une intervention acceptee pour que le repondant entende ce qui se passe.</string>
+	<string>Drone Aid Security ouvre votre micro pendant une intervention acceptee pour que le repondant entende ce qui se passe.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Drone Protection a besoin d'acceder a vos photos pour definir votre photo de profil.</string>
+	<string>Drone Aid Security a besoin d'acceder a vos photos pour definir votre photo de profil.</string>
 </dict>
 </plist>

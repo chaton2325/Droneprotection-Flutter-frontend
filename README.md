@@ -1,6 +1,6 @@
-# Drone Protection - Application mobile (Flutter)
+# Drone Aid Security - Application mobile (Flutter)
 
-Application mobile du systeme anti-bandit **Drone Protection** : un bouton d'urgence qui,
+Application mobile du systeme anti-bandit **Drone Aid Security** : un bouton d'urgence qui,
 une fois maintenu, declenche une alerte diffusee en temps reel a tous les repondants inscrits
 sur l'[interface web](../Droneprotection-Web-Interface), avec envoi automatique de la position.
 

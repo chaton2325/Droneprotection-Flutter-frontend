@@ -1,5 +1,5 @@
 name: drone_protection
-description: "Drone Protection - bouton d'urgence anti-bandit avec geolocalisation en temps reel."
+description: "Drone Aid Security - bouton d'urgence anti-bandit avec geolocalisation en temps reel."
 publish_to: 'none'
 
 version: 1.0.0+1
