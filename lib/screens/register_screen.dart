@@ -49,13 +49,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _submit(AuthProvider auth) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     FocusScope.of(context).unfocus();
-    await auth.register(
+    final email = _emailCtrl.text.trim();
+    final success = await auth.register(
       fullName: _nameCtrl.text.trim(),
-      email: _emailCtrl.text.trim(),
+      email: email,
       password: _passwordCtrl.text,
       role: _role,
       phone: _phoneCtrl.text.trim(),
     );
+    if (!success || !mounted) return;
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        icon: const Icon(
+          Icons.check_circle_rounded,
+          color: AppColors.ok500,
+          size: 40,
+        ),
+        title: const Text('Compte cree'),
+        content: const Text(
+          'Votre compte a bien ete cree. Connectez-vous avec vos identifiants '
+          'pour continuer.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: AppColors.textSecondary, height: 1.4),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Se connecter'),
+          ),
+        ],
+      ),
+    );
+
+    if (mounted) Navigator.of(context).pop(email);
   }
 
   @override

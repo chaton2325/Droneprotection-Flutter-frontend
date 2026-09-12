@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
+import 'screens/require_avatar_screen.dart';
 import 'screens/root_shell.dart';
 import 'screens/splash_screen.dart';
 import 'state/auth_provider.dart';
@@ -27,12 +28,16 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = context.watch<AuthProvider>().status;
+    final auth = context.watch<AuthProvider>();
+    final user = auth.user;
 
-    return switch (status) {
+    return switch (auth.status) {
       AuthStatus.unknown => const SplashScreen(),
       AuthStatus.unauthenticated => const LoginScreen(),
-      AuthStatus.authenticated => const RootShell(),
+      AuthStatus.authenticated =>
+        user != null && user.canTrigger && user.avatarUrl == null
+            ? const RequireAvatarScreen()
+            : const RootShell(),
     };
   }
 }

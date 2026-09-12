@@ -55,6 +55,9 @@ class AuthProvider extends ChangeNotifier {
     return _runAuthAction(() => authService.login(email, password));
   }
 
+  // Ne connecte pas automatiquement : l'utilisateur doit se reconnecter avec
+  // ses identifiants, ce qui declenche systematiquement le controle de
+  // photo de profil obligatoire sur le premier login.
   Future<bool> register({
     required String fullName,
     required String email,
@@ -62,15 +65,26 @@ class AuthProvider extends ChangeNotifier {
     required String role,
     String? phone,
   }) async {
-    return _runAuthAction(
-      () => authService.register(
+    loading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      await authService.register(
         fullName: fullName,
         email: email,
         password: password,
         role: role,
         phone: phone,
-      ),
-    );
+      );
+      return true;
+    } catch (err) {
+      errorMessage = err.toString().replaceFirst('ApiException: ', '');
+      return false;
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
   }
 
   Future<bool> _runAuthAction(Future<AuthResult> Function() action) async {

@@ -137,9 +137,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
                 Center(
                   child: TextButton(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                    ),
+                    onPressed: () async {
+                      final email = await Navigator.of(context).push<String>(
+                        MaterialPageRoute(
+                          builder: (_) => const RegisterScreen(),
+                        ),
+                      );
+                      if (email == null || !context.mounted) return;
+                      setState(() => _emailCtrl.text = email);
+                    },
                     child: const Text('Pas encore de compte ? Creer un compte'),
                   ),
                 ),

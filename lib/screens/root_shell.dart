@@ -33,18 +33,26 @@ class _RootShellState extends State<RootShell> {
 
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 20,
         title: Row(
           children: [
             Container(
-              width: 34,
-              height: 34,
-              decoration: const BoxDecoration(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [AppColors.brand400, AppColors.brand700],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.brand600.withValues(alpha: 0.35),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: const Icon(
                 Icons.shield_rounded,
@@ -52,19 +60,23 @@ class _RootShellState extends State<RootShell> {
                 size: 18,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   'Drone Aid Security',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.1,
+                  ),
                 ),
                 if (user != null)
                   Text(
                     user.fullName,
                     style: const TextStyle(
-                      fontSize: 11,
+                      fontSize: 11.5,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -72,30 +84,40 @@ class _RootShellState extends State<RootShell> {
             ),
           ],
         ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: AppColors.border, height: 1),
+        ),
       ),
       body: IndexedStack(
         index: _tabIndex,
         children: const [EmergencyTab(), HistoryTab(), SettingsTab()],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _tabIndex,
-        onDestinationSelected: (index) => setState(() => _tabIndex = index),
-        backgroundColor: AppColors.surface,
-        indicatorColor: AppColors.brand500.withValues(alpha: 0.18),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.warning_amber_rounded),
-            label: 'Urgence',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.history_rounded),
-            label: 'Historique',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Reglages',
-          ),
-        ],
+      bottomNavigationBar: DecoratedBox(
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.border)),
+        ),
+        child: NavigationBar(
+          selectedIndex: _tabIndex,
+          onDestinationSelected: (index) => setState(() => _tabIndex = index),
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.warning_amber_outlined),
+              selectedIcon: Icon(Icons.warning_rounded),
+              label: 'Urgence',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.history_outlined),
+              selectedIcon: Icon(Icons.history_rounded),
+              label: 'Historique',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings_rounded),
+              label: 'Reglages',
+            ),
+          ],
+        ),
       ),
     );
   }
