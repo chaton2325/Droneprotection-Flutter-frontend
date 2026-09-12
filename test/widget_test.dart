@@ -11,6 +11,7 @@ import 'package:drone_protection/services/audio_stream_service.dart';
 import 'package:drone_protection/services/auth_service.dart';
 import 'package:drone_protection/services/location_service.dart';
 import 'package:drone_protection/services/socket_service.dart';
+import 'package:drone_protection/services/video_stream_service.dart';
 import 'package:drone_protection/state/alert_provider.dart';
 import 'package:drone_protection/state/auth_provider.dart';
 
@@ -36,6 +37,7 @@ void main() {
               locationService: LocationService(),
               socketService: socketService,
               audioStreamService: AudioStreamService(socketService),
+              videoStreamService: VideoStreamService(socketService),
             ),
           ),
         ],

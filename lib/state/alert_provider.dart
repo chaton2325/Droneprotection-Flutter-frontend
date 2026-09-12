@@ -7,18 +7,21 @@ import '../services/alert_service.dart';
 import '../services/audio_stream_service.dart';
 import '../services/location_service.dart';
 import '../services/socket_service.dart';
+import '../services/video_stream_service.dart';
 
 class AlertProvider extends ChangeNotifier {
   final AlertService alertService;
   final LocationService locationService;
   final SocketService socketService;
   final AudioStreamService audioStreamService;
+  final VideoStreamService videoStreamService;
 
   AlertProvider({
     required this.alertService,
     required this.locationService,
     required this.socketService,
     required this.audioStreamService,
+    required this.videoStreamService,
   });
 
   EmergencyAlert? current;
@@ -33,6 +36,13 @@ class AlertProvider extends ChangeNotifier {
   // erreur non bloquante (ex: permission micro refusee).
   bool micActive = false;
   String? micErrorMessage;
+
+  // Camera(s) ouvertes automatiquement en meme temps que le micro (voir
+  // VideoStreamService) : videoDualCamera indique si avant+arriere ont pu
+  // etre ouvertes simultanement, ou si on est replie sur l'arriere seule.
+  bool videoActive = false;
+  bool videoDualCamera = false;
+  String? videoErrorMessage;
 
   Timer? _locationTimer;
   io.Socket? _boundSocket;
@@ -60,10 +70,12 @@ class AlertProvider extends ChangeNotifier {
 
     if (!wasAccepted && alert.status == 'accepted') {
       _startAudioStream(alert.id);
+      _startVideoStream(alert.id);
     }
     if (!alert.isActive) {
       _stopLocationLoop();
       _stopAudioStream();
+      _stopVideoStream();
     }
     notifyListeners();
   }
@@ -91,6 +103,32 @@ class AlertProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> _startVideoStream(int alertId) async {
+    videoErrorMessage = null;
+    try {
+      final started = await videoStreamService.start(alertId);
+      videoActive = started;
+      videoDualCamera = started && videoStreamService.isDualCamera;
+      if (!started) {
+        videoErrorMessage =
+            "Camera indisponible (permission refusee ?) - le repondant ne verra pas d'image.";
+      }
+    } catch (_) {
+      videoActive = false;
+      videoDualCamera = false;
+      videoErrorMessage = "Impossible d'ouvrir la camera.";
+    }
+    notifyListeners();
+  }
+
+  Future<void> _stopVideoStream() async {
+    if (!videoActive) return;
+    await videoStreamService.stop();
+    videoActive = false;
+    videoDualCamera = false;
+    notifyListeners();
+  }
+
   /// Recupere l'alerte active de l'utilisateur depuis le backend, si elle existe.
   ///
   /// Necessaire car [current] ne vit qu'en memoire : si le telephone s'eteint
@@ -109,6 +147,7 @@ class AlertProvider extends ChangeNotifier {
       _startLocationLoop();
       if (current!.status == 'accepted') {
         _startAudioStream(current!.id);
+        _startVideoStream(current!.id);
       }
       notifyListeners();
     } catch (_) {
@@ -178,6 +217,7 @@ class AlertProvider extends ChangeNotifier {
     current = await alertService.cancel(alert.id);
     _stopLocationLoop();
     _stopAudioStream();
+    _stopVideoStream();
     notifyListeners();
   }
 
@@ -187,6 +227,7 @@ class AlertProvider extends ChangeNotifier {
     current = await alertService.resolve(alert.id);
     _stopLocationLoop();
     _stopAudioStream();
+    _stopVideoStream();
     notifyListeners();
   }
 
@@ -194,6 +235,7 @@ class AlertProvider extends ChangeNotifier {
     current = null;
     _stopLocationLoop();
     _stopAudioStream();
+    _stopVideoStream();
     notifyListeners();
   }
 
@@ -213,6 +255,7 @@ class AlertProvider extends ChangeNotifier {
   void reset() {
     _stopLocationLoop();
     _stopAudioStream();
+    _stopVideoStream();
     _boundSocket = null;
     current = null;
     history = [];
@@ -222,6 +265,7 @@ class AlertProvider extends ChangeNotifier {
   void dispose() {
     _stopLocationLoop();
     audioStreamService.dispose();
+    videoStreamService.dispose();
     super.dispose();
   }
 }

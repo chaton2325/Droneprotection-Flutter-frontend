@@ -7,6 +7,7 @@ import 'services/audio_stream_service.dart';
 import 'services/auth_service.dart';
 import 'services/location_service.dart';
 import 'services/socket_service.dart';
+import 'services/video_stream_service.dart';
 import 'state/alert_provider.dart';
 import 'state/auth_provider.dart';
 
@@ -32,6 +33,7 @@ void main() {
             locationService: LocationService(),
             socketService: socketService,
             audioStreamService: AudioStreamService(socketService),
+            videoStreamService: VideoStreamService(socketService),
           ),
         ),
       ],

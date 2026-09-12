@@ -119,6 +119,55 @@ class AlertStatusCard extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color:
+                  (alertProvider.videoActive
+                          ? AppColors.ok500
+                          : AppColors.warn500)
+                      .withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color:
+                    (alertProvider.videoActive
+                            ? AppColors.ok500
+                            : AppColors.warn500)
+                        .withValues(alpha: 0.3),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  alertProvider.videoActive
+                      ? Icons.videocam_rounded
+                      : Icons.videocam_off_rounded,
+                  size: 14,
+                  color: alertProvider.videoActive
+                      ? AppColors.ok400
+                      : AppColors.warn400,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  alertProvider.videoActive
+                      ? (alertProvider.videoDualCamera
+                            ? 'Cameras avant + arriere ouvertes'
+                            : 'Camera arriere ouverte pour le repondant')
+                      : (alertProvider.videoErrorMessage ??
+                            'Ouverture de la camera...'),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: alertProvider.videoActive
+                        ? AppColors.ok400
+                        : AppColors.warn400,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
         const SizedBox(height: 24),
         Row(
