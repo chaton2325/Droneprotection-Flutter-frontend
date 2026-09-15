@@ -14,6 +14,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
+  final _usernameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -42,6 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void dispose() {
     _nameCtrl.dispose();
+    _usernameCtrl.dispose();
     _emailCtrl.dispose();
     _phoneCtrl.dispose();
     _passwordCtrl.dispose();
@@ -56,6 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final email = _emailCtrl.text.trim();
     final success = await auth.register(
       fullName: _nameCtrl.text.trim(),
+      username: _usernameCtrl.text.trim().toLowerCase(),
       email: email,
       password: _passwordCtrl.text,
       role: _role,
@@ -119,6 +122,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validator: (value) => (value == null || value.trim().isEmpty)
                       ? 'Nom requis'
                       : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _usernameCtrl,
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                    labelText: "Nom d'utilisateur",
+                    prefixText: '@',
+                  ),
+                  validator: (value) {
+                    final v = value?.trim() ?? '';
+                    if (v.isEmpty) return "Nom d'utilisateur requis";
+                    if (!RegExp(r'^[a-zA-Z0-9_]{3,20}$').hasMatch(v)) {
+                      return '3-20 caracteres : lettres, chiffres, _';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/alert_provider.dart';
 import '../state/auth_provider.dart';
+import '../state/friend_alerts_provider.dart';
 import '../theme/app_theme.dart';
 import 'emergency_tab.dart';
 import 'history_tab.dart';
@@ -24,6 +25,7 @@ class _RootShellState extends State<RootShell> {
       final alertProvider = context.read<AlertProvider>();
       alertProvider.attachSocket();
       alertProvider.restoreActiveAlert();
+      context.read<FriendAlertsProvider>().attachSocket();
     });
   }
 

@@ -6,12 +6,15 @@ import 'services/api_client.dart';
 import 'services/audio_stream_service.dart';
 import 'services/auth_service.dart';
 import 'services/chat_service.dart';
+import 'services/friends_service.dart';
 import 'services/location_service.dart';
 import 'services/socket_service.dart';
 import 'services/video_stream_service.dart';
 import 'state/alert_provider.dart';
 import 'state/auth_provider.dart';
 import 'state/chat_provider.dart';
+import 'state/friend_alerts_provider.dart';
+import 'state/friends_provider.dart';
 
 void main() {
   final apiClient = ApiClient();
@@ -43,6 +46,12 @@ void main() {
             chatService: ChatService(apiClient),
             socketService: socketService,
           ),
+        ),
+        ChangeNotifierProvider<FriendsProvider>(
+          create: (_) => FriendsProvider(friendsService: FriendsService(apiClient)),
+        ),
+        ChangeNotifierProvider<FriendAlertsProvider>(
+          create: (_) => FriendAlertsProvider(socketService: socketService),
         ),
       ],
       child: const DronaidApp(),

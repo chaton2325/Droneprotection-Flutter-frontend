@@ -5,14 +5,18 @@ class AppUser {
   final String? phone;
   final String role;
   final String? avatarUrl;
+  final String username;
+  final bool shareLocationWithFriends;
 
   const AppUser({
     required this.id,
     required this.fullName,
     required this.email,
     required this.role,
+    required this.username,
     this.phone,
     this.avatarUrl,
+    this.shareLocationWithFriends = false,
   });
 
   bool get canTrigger => role == 'victim' || role == 'both';
@@ -27,6 +31,8 @@ class AppUser {
       phone: json['phone'] as String?,
       role: json['role'] as String,
       avatarUrl: json['avatar_url'] as String?,
+      username: json['username'] as String,
+      shareLocationWithFriends: json['share_location_with_friends'] as bool? ?? false,
     );
   }
 
@@ -38,6 +44,8 @@ class AppUser {
       'phone': phone,
       'role': role,
       'avatar_url': avatarUrl,
+      'username': username,
+      'share_location_with_friends': shareLocationWithFriends,
     };
   }
 }

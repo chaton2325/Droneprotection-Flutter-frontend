@@ -21,6 +21,7 @@ class AuthService {
 
   Future<AuthResult> register({
     required String fullName,
+    required String username,
     required String email,
     required String password,
     required String role,
@@ -32,6 +33,7 @@ class AuthService {
       '/auth/register',
       body: {
         'fullName': fullName,
+        'username': username,
         'email': email,
         'password': password,
         'role': role,
@@ -41,6 +43,14 @@ class AuthService {
       },
     );
     return AuthResult(data['token'] as String, AppUser.fromJson(data['user']));
+  }
+
+  Future<AppUser> updateLocationSharing(bool enabled) async {
+    final data = await _client.patch(
+      '/users/me/location-sharing',
+      body: {'enabled': enabled},
+    );
+    return AppUser.fromJson(data['user']);
   }
 
   Future<AppUser> me() async {

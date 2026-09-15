@@ -60,6 +60,7 @@ class AuthProvider extends ChangeNotifier {
   // photo de profil obligatoire sur le premier login.
   Future<bool> register({
     required String fullName,
+    required String username,
     required String email,
     required String password,
     required String role,
@@ -74,6 +75,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       await authService.register(
         fullName: fullName,
+        username: username,
         email: email,
         password: password,
         role: role,
@@ -127,6 +129,11 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> removeAvatar() async {
     user = await authService.removeAvatar();
+    notifyListeners();
+  }
+
+  Future<void> updateLocationSharing(bool enabled) async {
+    user = await authService.updateLocationSharing(enabled);
     notifyListeners();
   }
 

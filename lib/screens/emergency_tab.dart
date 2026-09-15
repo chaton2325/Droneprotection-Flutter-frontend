@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/alert.dart';
 import '../state/alert_provider.dart';
+import '../state/friend_alerts_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/time.dart';
 import '../widgets/alert_status_card.dart';
 import '../widgets/sos_button.dart';
 
@@ -11,14 +14,18 @@ class EmergencyTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final alertProvider = context.watch<AlertProvider>();
+    final friendAlerts = context.watch<FriendAlertsProvider>().active;
     final current = alertProvider.current;
 
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-        child: current != null && current.isActive
-            ? AlertStatusCard(alert: current)
-            : Column(
+        child: Column(
+          children: [
+            for (final alert in friendAlerts) _FriendAlertBanner(alert: alert),
+            current != null && current.isActive
+                ? AlertStatusCard(alert: current)
+                : Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Column(
@@ -86,6 +93,53 @@ class EmergencyTab extends StatelessWidget {
                   ],
                 ],
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FriendAlertBanner extends StatelessWidget {
+  final EmergencyAlert alert;
+  const _FriendAlertBanner({required this.alert});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.brand500.withValues(alpha: 0.1),
+        border: Border.all(color: AppColors.brand500.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.warning_rounded, color: AppColors.brand400, size: 22),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${alert.victimName} a declenche une alerte',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.brand400,
+                    fontSize: 13.5,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${alert.locationName ?? "${alert.latitude?.toStringAsFixed(4)}, ${alert.longitude?.toStringAsFixed(4)}"} - ${timeAgo(alert.createdAt)}',
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
