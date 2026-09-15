@@ -5,6 +5,7 @@ class EmergencyAlert {
   final double? latitude;
   final double? longitude;
   final double? accuracy;
+  final String? locationName;
   final int userId;
   final String victimName;
   final String? victimPhone;
@@ -28,6 +29,7 @@ class EmergencyAlert {
     this.latitude,
     this.longitude,
     this.accuracy,
+    this.locationName,
     this.victimPhone,
     this.acceptedBy,
     this.responderName,
@@ -52,6 +54,7 @@ class EmergencyAlert {
       latitude: asDouble(json['latitude']),
       longitude: asDouble(json['longitude']),
       accuracy: asDouble(json['accuracy']),
+      locationName: json['location_name'] as String?,
       userId: json['user_id'] as int,
       victimName: json['victim_name'] as String,
       victimPhone: json['victim_phone'] as String?,

@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationServiceException implements Exception {
@@ -41,5 +42,30 @@ class LocationService {
     return Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
     );
+  }
+
+  /// Resout un nom de lieu lisible ("Akwa, Douala") a partir de lat/lng, pour
+  /// affichage cote repondant. Best-effort : ne doit jamais lever (pas de
+  /// reseau, geocodeur indisponible sur l'appareil...), retourne juste null.
+  Future<String?> reverseGeocode(double latitude, double longitude) async {
+    try {
+      final placemarks = await placemarkFromCoordinates(latitude, longitude)
+          .timeout(const Duration(seconds: 8));
+      if (placemarks.isEmpty) return null;
+
+      final placemark = placemarks.first;
+      final parts = [
+        if ((placemark.locality ?? '').isNotEmpty) placemark.locality,
+        if ((placemark.locality ?? '').isEmpty &&
+            (placemark.subAdministrativeArea ?? '').isNotEmpty)
+          placemark.subAdministrativeArea,
+        if ((placemark.administrativeArea ?? '').isNotEmpty)
+          placemark.administrativeArea,
+      ];
+      if (parts.isEmpty) return null;
+      return parts.join(', ');
+    } catch (_) {
+      return null;
+    }
   }
 }

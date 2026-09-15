@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
 import '../models/alert.dart';
+import '../screens/chat_screen.dart';
 import '../state/alert_provider.dart';
 import '../theme/app_theme.dart';
 import 'status_pill.dart';
@@ -65,10 +66,27 @@ class AlertStatusCard extends StatelessWidget {
         ),
         if (alert.responderPhone != null && !isPending) ...[
           const SizedBox(height: 12),
-          TextButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.call_rounded, size: 18),
-            label: Text(alert.responderPhone!),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.call_rounded, size: 18),
+                label: Text(alert.responderPhone!),
+              ),
+              if (alert.status == 'accepted') ...[
+                const SizedBox(width: 8),
+                TextButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ChatScreen(alertId: alert.id),
+                    ),
+                  ),
+                  icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
+                  label: const Text('Message'),
+                ),
+              ],
+            ],
           ),
         ],
         if (alert.status == 'accepted') ...[

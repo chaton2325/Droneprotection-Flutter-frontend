@@ -26,7 +26,7 @@ class _SosButtonState extends State<SosButton> with TickerProviderStateMixin {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1600),
+      duration: const Duration(seconds: 2),
     );
     _controller.addStatusListener(_handleStatus);
     _pulseController = AnimationController(
@@ -119,6 +119,8 @@ class _SosButtonState extends State<SosButton> with TickerProviderStateMixin {
                     child: Center(
                       child: widget.busy
                           ? const CircularProgressIndicator(color: Colors.white)
+                          : _controller.value > 0 && !_triggered
+                          ? _Countdown(value: _controller.value)
                           : const Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -152,6 +154,47 @@ class _SosButtonState extends State<SosButton> with TickerProviderStateMixin {
           );
         },
       ),
+    );
+  }
+}
+
+/// Nombre de secondes restantes avant le declenchement (2s au total),
+/// affiche pendant que l'utilisateur maintient le bouton.
+class _Countdown extends StatelessWidget {
+  final double value;
+  const _Countdown({required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final secondsLeft = (2 * (1 - value)).ceil().clamp(1, 2);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '$secondsLeft',
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: 48,
+            height: 1,
+          ),
+        ),
+        const SizedBox(height: 6),
+        const SizedBox(
+          width: 128,
+          child: Text(
+            'Relachez pour annuler',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              fontSize: 12,
+              height: 1.25,
+              letterSpacing: 0.2,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -170,6 +170,7 @@ class AlertProvider extends ChangeNotifier {
       );
       current = alert;
       _startLocationLoop();
+      _resolveLocationName(alert.id, position.latitude, position.longitude);
       return true;
     } catch (err) {
       errorMessage = err.toString().replaceFirst('ApiException: ', '');
@@ -177,6 +178,29 @@ class AlertProvider extends ChangeNotifier {
     } finally {
       triggering = false;
       notifyListeners();
+    }
+  }
+
+  /// Ne bloque jamais le declenchement de l'alerte (latence critique) : le
+  /// nom de lieu est resolu en arriere-plan et remonte des qu'il est pret,
+  /// via le meme endpoint que les mises a jour de position.
+  Future<void> _resolveLocationName(int alertId, double lat, double lng) async {
+    final name = await locationService.reverseGeocode(lat, lng);
+    if (name == null) return;
+    final alert = current;
+    if (alert == null || alert.id != alertId) return;
+    try {
+      current = await alertService.sendLocation(
+        alertId,
+        latitude: lat,
+        longitude: lng,
+        accuracy: alert.accuracy,
+        locationName: name,
+      );
+      notifyListeners();
+    } catch (_) {
+      // Le prochain tick de la boucle de position reessaiera sans le nom si
+      // celui-ci echoue ; ce n'est pas critique.
     }
   }
 

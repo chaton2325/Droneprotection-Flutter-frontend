@@ -17,6 +17,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailCtrl = TextEditingController();
   final _phoneCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+  final _emergencyContactNameCtrl = TextEditingController();
+  final _emergencyContactPhoneCtrl = TextEditingController();
   String _role = 'victim';
 
   static const _roles = [
@@ -43,6 +45,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailCtrl.dispose();
     _phoneCtrl.dispose();
     _passwordCtrl.dispose();
+    _emergencyContactNameCtrl.dispose();
+    _emergencyContactPhoneCtrl.dispose();
     super.dispose();
   }
 
@@ -56,6 +60,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       password: _passwordCtrl.text,
       role: _role,
       phone: _phoneCtrl.text.trim(),
+      emergencyContactName: _emergencyContactNameCtrl.text.trim(),
+      emergencyContactPhone: _emergencyContactPhoneCtrl.text.trim(),
     );
     if (!success || !mounted) return;
 
@@ -130,6 +136,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Telephone (optionnel)',
                   ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Contact d'urgence",
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Une personne a prevenir en cas d\'urgence. Visible par le '
+                  'repondant qui prend en charge votre alerte.',
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12.5,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _emergencyContactNameCtrl,
+                  decoration: const InputDecoration(
+                    labelText: "Nom du contact d'urgence",
+                  ),
+                  validator: (value) => (value == null || value.trim().isEmpty)
+                      ? 'Nom requis'
+                      : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emergencyContactPhoneCtrl,
+                  keyboardType: TextInputType.phone,
+                  decoration: const InputDecoration(
+                    labelText: "Telephone du contact d'urgence",
+                  ),
+                  validator: (value) => (value == null || value.trim().isEmpty)
+                      ? 'Telephone requis'
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(

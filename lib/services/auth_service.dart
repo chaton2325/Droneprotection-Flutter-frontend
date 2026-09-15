@@ -24,6 +24,8 @@ class AuthService {
     required String email,
     required String password,
     required String role,
+    required String emergencyContactName,
+    required String emergencyContactPhone,
     String? phone,
   }) async {
     final data = await _client.post(
@@ -33,6 +35,8 @@ class AuthService {
         'email': email,
         'password': password,
         'role': role,
+        'emergencyContactName': emergencyContactName,
+        'emergencyContactPhone': emergencyContactPhone,
         if (phone != null && phone.isNotEmpty) 'phone': phone,
       },
     );
