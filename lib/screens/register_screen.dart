@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/auth_provider.dart';
@@ -22,6 +24,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emergencyContactPhoneCtrl = TextEditingController();
   String _role = 'victim';
 
+  Timer? _usernameDebounce;
+  int _usernameCheckToken = 0;
+  bool _checkingUsername = false;
+  bool? _usernameAvailable;
+
   static const _roles = [
     (
       value: 'victim',
@@ -42,6 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    _usernameDebounce?.cancel();
     _nameCtrl.dispose();
     _usernameCtrl.dispose();
     _emailCtrl.dispose();
@@ -52,8 +60,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  void _onUsernameChanged(String value) {
+    _usernameDebounce?.cancel();
+    setState(() => _usernameAvailable = null);
+
+    final candidate = value.trim().toLowerCase();
+    if (!RegExp(r'^[a-zA-Z0-9_]{3,20}$').hasMatch(candidate)) return;
+
+    _usernameDebounce = Timer(
+      const Duration(milliseconds: 450),
+      () => _checkUsernameAvailability(candidate),
+    );
+  }
+
+  Future<void> _checkUsernameAvailability(String candidate) async {
+    final token = ++_usernameCheckToken;
+    setState(() => _checkingUsername = true);
+    bool? available;
+    try {
+      available = await context.read<AuthProvider>().authService
+          .isUsernameAvailable(candidate);
+    } catch (_) {
+      // Impossible de verifier (reseau) : on ne bloque pas la saisie, la
+      // verification faite par le serveur au moment de l'inscription reste
+      // la garantie finale.
+      available = null;
+    }
+    if (!mounted || token != _usernameCheckToken) return;
+    setState(() {
+      _checkingUsername = false;
+      _usernameAvailable = available;
+    });
+  }
+
   Future<void> _submit(AuthProvider auth) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (_usernameAvailable == false) return;
     FocusScope.of(context).unfocus();
     final email = _emailCtrl.text.trim();
     final success = await auth.register(
@@ -127,9 +169,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _usernameCtrl,
                   autocorrect: false,
-                  decoration: const InputDecoration(
+                  onChanged: _onUsernameChanged,
+                  decoration: InputDecoration(
                     labelText: "Nom d'utilisateur",
                     prefixText: '@',
+                    suffixIcon: _checkingUsername
+                        ? const Padding(
+                            padding: EdgeInsets.all(14),
+                            child: SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          )
+                        : _usernameAvailable == true
+                        ? const Icon(
+                            Icons.check_circle_rounded,
+                            color: AppColors.ok500,
+                          )
+                        : _usernameAvailable == false
+                        ? const Icon(
+                            Icons.cancel_rounded,
+                            color: AppColors.brand500,
+                          )
+                        : null,
                   ),
                   validator: (value) {
                     final v = value?.trim() ?? '';
@@ -137,9 +200,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (!RegExp(r'^[a-zA-Z0-9_]{3,20}$').hasMatch(v)) {
                       return '3-20 caracteres : lettres, chiffres, _';
                     }
+                    if (_usernameAvailable == false) {
+                      return "Ce nom d'utilisateur est deja pris.";
+                    }
                     return null;
                   },
                 ),
+                if (_usernameAvailable == false) ...[
+                  const SizedBox(height: 6),
+                  const Text(
+                    "Ce nom d'utilisateur est deja pris.",
+                    style: TextStyle(color: AppColors.brand400, fontSize: 12.5),
+                  ),
+                ] else if (_usernameAvailable == true) ...[
+                  const SizedBox(height: 6),
+                  const Text(
+                    "Nom d'utilisateur disponible.",
+                    style: TextStyle(color: AppColors.ok500, fontSize: 12.5),
+                  ),
+                ],
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailCtrl,
@@ -289,7 +368,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 PrimaryButton(
                   label: 'Creer mon compte',
                   loading: auth.loading,
-                  onPressed: () => _submit(auth),
+                  onPressed: _usernameAvailable == false
+                      ? null
+                      : () => _submit(auth),
                 ),
                 const SizedBox(height: 24),
               ],

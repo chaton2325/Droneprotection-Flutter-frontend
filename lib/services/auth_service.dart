@@ -53,6 +53,27 @@ class AuthService {
     return AppUser.fromJson(data['user']);
   }
 
+  /// Active/desactive la position en direct (independante des alertes) : voir
+  /// LiveLocationProvider pour l'envoi periodique tant que c'est actif.
+  Future<AppUser> updateLiveLocationSharing(bool enabled) async {
+    final data = await _client.patch(
+      '/users/me/live-location-sharing',
+      body: {'enabled': enabled},
+    );
+    return AppUser.fromJson(data['user']);
+  }
+
+  /// Retourne false si le serveur considere le partage inactif (l'utilisateur
+  /// a pu le desactiver depuis un autre appareil) : LiveLocationProvider s'en
+  /// sert pour arreter d'essayer plutot que de continuer a l'aveugle.
+  Future<bool> pushLiveLocation(double latitude, double longitude) async {
+    final data = await _client.post(
+      '/users/me/location',
+      body: {'latitude': latitude, 'longitude': longitude},
+    );
+    return data['active'] as bool? ?? false;
+  }
+
   Future<AppUser> me() async {
     final data = await _client.get('/auth/me');
     return AppUser.fromJson(data['user']);
@@ -76,5 +97,15 @@ class AuthService {
   Future<AppUser> removeAvatar() async {
     final data = await _client.delete('/users/me/avatar');
     return AppUser.fromJson(data['user']);
+  }
+
+  /// Verifie la disponibilite d'un @nom d'utilisateur pendant la saisie du
+  /// formulaire d'inscription, avant que le reste des champs soit rempli.
+  Future<bool> isUsernameAvailable(String username) async {
+    final data = await _client.get(
+      '/auth/check-username',
+      query: {'username': username},
+    );
+    return data['available'] as bool;
   }
 }

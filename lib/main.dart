@@ -14,7 +14,9 @@ import 'state/alert_provider.dart';
 import 'state/auth_provider.dart';
 import 'state/chat_provider.dart';
 import 'state/friend_alerts_provider.dart';
+import 'state/friend_live_location_provider.dart';
 import 'state/friends_provider.dart';
+import 'state/live_location_provider.dart';
 
 void main() {
   final apiClient = ApiClient();
@@ -52,6 +54,15 @@ void main() {
         ),
         ChangeNotifierProvider<FriendAlertsProvider>(
           create: (_) => FriendAlertsProvider(socketService: socketService),
+        ),
+        ChangeNotifierProvider<LiveLocationProvider>(
+          create: (_) => LiveLocationProvider(
+            authService: AuthService(apiClient),
+            locationService: LocationService(),
+          ),
+        ),
+        ChangeNotifierProvider<FriendLiveLocationProvider>(
+          create: (_) => FriendLiveLocationProvider(socketService: socketService),
         ),
       ],
       child: const DronaidApp(),

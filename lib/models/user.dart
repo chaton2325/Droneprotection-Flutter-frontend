@@ -7,6 +7,7 @@ class AppUser {
   final String? avatarUrl;
   final String username;
   final bool shareLocationWithFriends;
+  final bool liveLocationSharing;
 
   const AppUser({
     required this.id,
@@ -17,6 +18,7 @@ class AppUser {
     this.phone,
     this.avatarUrl,
     this.shareLocationWithFriends = false,
+    this.liveLocationSharing = false,
   });
 
   bool get canTrigger => role == 'victim' || role == 'both';
@@ -33,6 +35,7 @@ class AppUser {
       avatarUrl: json['avatar_url'] as String?,
       username: json['username'] as String,
       shareLocationWithFriends: json['share_location_with_friends'] as bool? ?? false,
+      liveLocationSharing: json['live_location_sharing'] as bool? ?? false,
     );
   }
 
@@ -46,6 +49,7 @@ class AppUser {
       'avatar_url': avatarUrl,
       'username': username,
       'share_location_with_friends': shareLocationWithFriends,
+      'live_location_sharing': liveLocationSharing,
     };
   }
 }

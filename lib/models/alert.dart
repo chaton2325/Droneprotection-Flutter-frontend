@@ -9,6 +9,7 @@ class EmergencyAlert {
   final int userId;
   final String victimName;
   final String? victimPhone;
+  final String? victimAvatarUrl;
   final int? acceptedBy;
   final String? responderName;
   final String? responderPhone;
@@ -31,6 +32,7 @@ class EmergencyAlert {
     this.accuracy,
     this.locationName,
     this.victimPhone,
+    this.victimAvatarUrl,
     this.acceptedBy,
     this.responderName,
     this.responderPhone,
@@ -58,6 +60,7 @@ class EmergencyAlert {
       userId: json['user_id'] as int,
       victimName: json['victim_name'] as String,
       victimPhone: json['victim_phone'] as String?,
+      victimAvatarUrl: json['victim_avatar_url'] as String?,
       acceptedBy: json['accepted_by'] as int?,
       responderName: json['responder_name'] as String?,
       responderPhone: json['responder_phone'] as String?,

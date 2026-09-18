@@ -49,30 +49,6 @@ class AppTheme {
         elevation: 0,
         centerTitle: false,
       ),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        height: 66,
-        indicatorColor: AppColors.brand500.withValues(alpha: 0.16),
-        indicatorShape: const StadiumBorder(),
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        iconTheme: WidgetStateProperty.resolveWith((states) {
-          final selected = states.contains(WidgetState.selected);
-          return IconThemeData(
-            color: selected ? AppColors.brand400 : AppColors.textSecondary,
-            size: selected ? 25 : 23,
-          );
-        }),
-        labelTextStyle: WidgetStateProperty.resolveWith((states) {
-          final selected = states.contains(WidgetState.selected);
-          return TextStyle(
-            fontSize: 11.5,
-            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected ? AppColors.brand400 : AppColors.textSecondary,
-          );
-        }),
-      ),
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 0,

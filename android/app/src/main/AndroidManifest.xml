@@ -50,5 +50,18 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <!-- Requis pour que url_launcher puisse ouvrir Google Maps (ou un
+             navigateur) depuis l'onglet Alertes, voir friend_alerts_tab.dart. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="https"/>
+        </intent>
+        <!-- Requis pour que url_launcher puisse lancer l'appel telephonique
+             vers le repondant assigne, voir alert_status_card.dart. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="tel"/>
+        </intent>
     </queries>
 </manifest>

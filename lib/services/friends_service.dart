@@ -49,4 +49,8 @@ class FriendsService {
   Future<void> cancelOrDecline(int requestId) async {
     await _client.delete('/friends/requests/$requestId');
   }
+
+  Future<void> removeFriend(int friendshipId) async {
+    await _client.delete('/friends/$friendshipId');
+  }
 }

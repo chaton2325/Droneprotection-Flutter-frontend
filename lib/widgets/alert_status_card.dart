@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../models/alert.dart';
 import '../screens/chat_screen.dart';
@@ -10,6 +11,20 @@ import 'status_pill.dart';
 class AlertStatusCard extends StatelessWidget {
   final EmergencyAlert alert;
   const AlertStatusCard({super.key, required this.alert});
+
+  Future<void> _callResponder(BuildContext context, String phone) async {
+    bool launched = false;
+    try {
+      launched = await launchUrl(Uri.parse('tel:$phone'));
+    } catch (_) {
+      launched = false;
+    }
+    if (!launched && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Impossible de lancer l'appel sur cet appareil.")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,28 +79,28 @@ class AlertStatusCard extends StatelessWidget {
           textAlign: TextAlign.center,
           style: const TextStyle(color: AppColors.textSecondary, height: 1.4),
         ),
-        if (alert.responderPhone != null && !isPending) ...[
+        if (alert.status == 'accepted') ...[
           const SizedBox(height: 12),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.call_rounded, size: 18),
-                label: Text(alert.responderPhone!),
-              ),
-              if (alert.status == 'accepted') ...[
-                const SizedBox(width: 8),
+              if (alert.responderPhone != null) ...[
                 TextButton.icon(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ChatScreen(alertId: alert.id),
-                    ),
-                  ),
-                  icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
-                  label: const Text('Message'),
+                  onPressed: () => _callResponder(context, alert.responderPhone!),
+                  icon: const Icon(Icons.call_rounded, size: 18),
+                  label: Text(alert.responderPhone!),
                 ),
+                const SizedBox(width: 8),
               ],
+              TextButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => ChatScreen(alertId: alert.id),
+                  ),
+                ),
+                icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
+                label: const Text('Message'),
+              ),
             ],
           ),
         ],
