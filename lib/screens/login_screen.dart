@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/auth_provider.dart';
 import '../theme/app_theme.dart';
+import '../widgets/dronaid_logo.dart';
 import '../widgets/primary_button.dart';
 import 'register_screen.dart';
 
@@ -44,32 +45,10 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [AppColors.brand400, AppColors.brand700],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.brand600.withValues(alpha: 0.4),
-                        blurRadius: 24,
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.shield_rounded,
-                    color: Colors.white,
-                    size: 32,
-                  ),
-                ),
+                const DronaidLogo(size: 88),
                 const SizedBox(height: 24),
                 const Text(
-                  'Drone Aid Security',
+                  'Dronaid Security',
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 6),

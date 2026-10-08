@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Drone Aid Security</string>
+	<string>Dronaid</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>drone_protection</string>
+	<string>Dronaid</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -34,27 +34,20 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Drone Aid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
+	<string>Dronaid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Drone Aid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
+	<string>Dronaid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Drone Aid Security ouvre votre micro pendant une intervention acceptee pour que le repondant entende ce qui se passe.</string>
+	<string>Dronaid Security ouvre votre micro pendant une intervention acceptee pour que le repondant entende ce qui se passe.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Drone Aid Security ouvre votre/vos camera(s) pendant une intervention acceptee pour que le repondant voie ce qui se passe.</string>
+	<string>Dronaid Security ouvre votre/vos camera(s) pendant une intervention acceptee pour que le repondant voie ce qui se passe.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Drone Aid Security a besoin d'acceder a vos photos pour definir votre photo de profil.</string>
+	<string>Dronaid Security a besoin d'acceder a vos photos pour definir votre photo de profil.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>

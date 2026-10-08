@@ -105,7 +105,7 @@ class _RootShellState extends State<RootShell> with WidgetsBindingObserver {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Drone Aid Security',
+                  'Dronaid Security',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,

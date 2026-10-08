@@ -7,6 +7,7 @@ import '../state/friend_live_location_provider.dart';
 import '../state/live_location_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/avatar_upload_panel.dart';
+import '../widgets/dronaid_logo.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({super.key});
@@ -109,6 +110,15 @@ class SettingsTab extends StatelessWidget {
               onPressed: () => _logout(context),
               icon: const Icon(Icons.logout_rounded, size: 18),
               label: const Text('Deconnexion'),
+            ),
+          ),
+          const SizedBox(height: 32),
+          const Center(child: DronaidLogo(size: 72)),
+          const SizedBox(height: 8),
+          const Center(
+            child: Text(
+              'Dronaid Security',
+              style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
             ),
           ),
         ],

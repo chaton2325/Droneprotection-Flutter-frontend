@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   static const _roles = [
     (
       value: 'victim',
-      title: 'Utilisateur mobile',
+      title: 'Utilisateur simple',
       desc: "Declencher une alerte d'urgence en cas de besoin.",
     ),
     (

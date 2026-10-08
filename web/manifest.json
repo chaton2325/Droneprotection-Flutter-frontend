@@ -1,6 +1,6 @@
 {
-    "name": "drone_protection",
-    "short_name": "drone_protection",
+    "name": "Dronaid Security",
+    "short_name": "Dronaid",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

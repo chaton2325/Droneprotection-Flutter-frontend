@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/alert_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/permission_prompt.dart';
 import '../widgets/alert_status_card.dart';
 import '../widgets/sos_button.dart';
 
@@ -62,8 +63,11 @@ class EmergencyTab extends StatelessWidget {
                   const SizedBox(height: 48),
                   SosButton(
                     busy: alertProvider.triggering,
-                    onConfirmed: () =>
-                        context.read<AlertProvider>().triggerAlert(),
+                    onConfirmed: () async {
+                      final provider = context.read<AlertProvider>();
+                      await ensureEmergencyPermissions(context);
+                      await provider.triggerAlert();
+                    },
                   ),
                   if (alertProvider.errorMessage != null) ...[
                     const SizedBox(height: 20),

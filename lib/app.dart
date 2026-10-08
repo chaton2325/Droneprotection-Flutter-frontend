@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'screens/location_required_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/require_avatar_screen.dart';
 import 'screens/root_shell.dart';
@@ -13,7 +14,7 @@ class DronaidApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Drone Aid Security',
+      title: 'Dronaid Security',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
       darkTheme: AppTheme.dark,
@@ -34,10 +35,11 @@ class AuthGate extends StatelessWidget {
     return switch (auth.status) {
       AuthStatus.unknown => const SplashScreen(),
       AuthStatus.unauthenticated => const LoginScreen(),
-      AuthStatus.authenticated =>
-        user != null && user.canTrigger && user.avatarUrl == null
+      AuthStatus.authenticated => PermissionGate(
+        child: user != null && user.canTrigger && user.avatarUrl == null
             ? const RequireAvatarScreen()
             : const RootShell(),
+      ),
     };
   }
 }

@@ -1,0 +1,2 @@
+*.sh text eol=lf
+ios/Podfile text eol=lf
