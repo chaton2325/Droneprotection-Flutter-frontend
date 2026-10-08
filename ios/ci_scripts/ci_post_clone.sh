@@ -1,11 +1,11 @@
 #!/bin/sh
-# Xcode Cloud : installe Flutter, recupere les paquets et genere les Pods
+# Xcode Cloud : installe Flutter (version figee = celle utilisee en local), recupere les paquets et genere les Pods
 # (Generated.xcconfig et Pods/ ne sont pas commites).
 set -ex
 
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 
-git clone https://github.com/flutter/flutter.git --depth 1 -b stable "$HOME/flutter"
+git clone https://github.com/flutter/flutter.git --depth 1 -b 3.38.3 "$HOME/flutter"
 export PATH="$PATH:$HOME/flutter/bin"
 
 flutter --version
