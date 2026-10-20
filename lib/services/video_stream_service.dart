@@ -74,6 +74,7 @@ class VideoStreamService {
         enableAudio: false,
       );
       await controller.initialize();
+      await _disableFlash(controller);
       _backController = controller;
     } catch (_) {
       _backController = null;
@@ -89,6 +90,7 @@ class VideoStreamService {
           enableAudio: false,
         );
         await controller.initialize();
+        await _disableFlash(controller);
         _frontController = controller;
         _dualCamera = true;
       } catch (_) {
@@ -102,6 +104,16 @@ class VideoStreamService {
     _active = true;
     _timer = Timer.periodic(frameInterval, (_) => _captureTick());
     return true;
+  }
+
+  // Flash par defaut = auto : a chaque takePicture() (toutes les 700 ms) iOS
+  // peut declencher le flash / un flash d'ecran, d'ou un clignotement blanc.
+  Future<void> _disableFlash(CameraController controller) async {
+    try {
+      await controller.setFlashMode(FlashMode.off);
+    } catch (_) {
+      // Camera sans flash : rien a desactiver.
+    }
   }
 
   CameraDescription? _findByDirection(

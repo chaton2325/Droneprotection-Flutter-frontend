@@ -58,6 +58,7 @@ class _PermissionGateState extends State<PermissionGate>
   Timer? _recheck;
   bool _loaded = false;
   bool _serviceOn = true;
+  int _failedChecks = 0;
   final Map<Permission, PermissionStatus> _status = {};
 
   bool get _allGranted =>
@@ -92,6 +93,15 @@ class _PermissionGateState extends State<PermissionGate>
     }
     final serviceOn = await Geolocator.isLocationServiceEnabled();
     if (!mounted) return;
+    final ok = statuses.values.every((s) => s.isGranted) && serviceOn;
+    // Ouvrir camera/micro pendant une alerte fait parfois remonter un etat
+    // transitoire non autorise sur iOS : sans ce filtre l'ecran de la porte
+    // remplacait l'app a chaque sondage (clignotement). On exige donc deux
+    // verifications negatives consecutives avant de bloquer l'app.
+    _failedChecks = ok ? 0 : _failedChecks + 1;
+    if (_loaded && _allGranted && _serviceOn && !ok && _failedChecks < 2) {
+      return;
+    }
     setState(() {
       _status
         ..clear()
