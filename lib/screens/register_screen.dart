@@ -22,30 +22,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordCtrl = TextEditingController();
   final _emergencyContactNameCtrl = TextEditingController();
   final _emergencyContactPhoneCtrl = TextEditingController();
-  String _role = 'victim';
+  // L'app mobile n'inscrit que des victimes ; les repondants passent par le web.
+  static const _role = 'victim';
 
   Timer? _usernameDebounce;
   int _usernameCheckToken = 0;
   bool _checkingUsername = false;
   bool? _usernameAvailable;
-
-  static const _roles = [
-    (
-      value: 'victim',
-      title: 'Utilisateur simple',
-      desc: "Declencher une alerte d'urgence en cas de besoin.",
-    ),
-    (
-      value: 'responder',
-      title: 'Repondant',
-      desc: 'Recevoir les alertes (via l\'interface web).',
-    ),
-    (
-      value: 'both',
-      title: 'Les deux',
-      desc: 'Declencher et recevoir des alertes.',
-    ),
-  ];
 
   @override
   void dispose() {
@@ -280,70 +263,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ? '6 caracteres minimum'
                       : null,
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Role',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 8),
-                ..._roles.map((role) {
-                  final selected = _role == role.value;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(14),
-                      onTap: () => setState(() => _role = role.value),
-                      child: Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: selected
-                              ? AppColors.brand500.withValues(alpha: 0.1)
-                              : AppColors.surface2,
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: selected
-                                ? AppColors.brand500
-                                : AppColors.border,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              selected
-                                  ? Icons.radio_button_checked
-                                  : Icons.radio_button_off,
-                              color: selected
-                                  ? AppColors.brand500
-                                  : AppColors.textSecondary,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    role.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    role.desc,
-                                    style: const TextStyle(
-                                      color: AppColors.textSecondary,
-                                      fontSize: 12.5,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
                 if (auth.errorMessage != null) ...[
                   const SizedBox(height: 8),
                   Container(
