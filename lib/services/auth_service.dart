@@ -19,6 +19,21 @@ class AuthService {
     return AuthResult(data['token'] as String, AppUser.fromJson(data['user']));
   }
 
+  Future<void> forgotPassword(String email) async {
+    await _client.post('/auth/forgot-password', body: {'email': email});
+  }
+
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String password,
+  }) async {
+    await _client.post(
+      '/auth/reset-password',
+      body: {'email': email, 'code': code, 'password': password},
+    );
+  }
+
   Future<AuthResult> register({
     required String fullName,
     required String username,

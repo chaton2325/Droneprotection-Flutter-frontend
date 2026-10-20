@@ -4,6 +4,7 @@ import '../state/auth_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/dronaid_logo.dart';
 import '../widgets/primary_button.dart';
+import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -86,6 +87,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) => (value == null || value.isEmpty)
                       ? 'Mot de passe requis'
                       : null,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ForgotPasswordScreen(
+                          initialEmail: _emailCtrl.text.trim(),
+                        ),
+                      ),
+                    ),
+                    child: const Text('Mot de passe oublie ?'),
+                  ),
                 ),
                 if (auth.errorMessage != null) ...[
                   const SizedBox(height: 16),
