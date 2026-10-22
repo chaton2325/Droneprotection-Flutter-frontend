@@ -49,7 +49,7 @@ class LocationService {
   /// reseau, geocodeur indisponible sur l'appareil...), retourne juste null.
   Future<String?> reverseGeocode(double latitude, double longitude) async {
     try {
-      final placemarks = await placemarkFromCoordinates(latitude, longitude)
+      final placemarks = await Geocoding().placemarkFromCoordinates(latitude, longitude)
           .timeout(const Duration(seconds: 8));
       if (placemarks.isEmpty) return null;
 
