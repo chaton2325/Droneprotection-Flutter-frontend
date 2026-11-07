@@ -89,6 +89,11 @@ class AuthService {
     return data['active'] as bool? ?? false;
   }
 
+  /// Supprime definitivement le compte et ses donnees (guideline Apple 5.1.1(v)).
+  Future<void> deleteAccount() async {
+    await _client.delete('/users/me');
+  }
+
   Future<AppUser> me() async {
     final data = await _client.get('/auth/me');
     return AppUser.fromJson(data['user']);

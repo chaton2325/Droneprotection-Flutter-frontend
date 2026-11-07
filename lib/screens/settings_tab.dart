@@ -20,6 +20,51 @@ class SettingsTab extends StatelessWidget {
     await context.read<AuthProvider>().logout();
   }
 
+  Future<void> _confirmDelete(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Supprimer votre compte ?'),
+        content: const Text(
+          'Votre compte et toutes vos donnees (profil, amis, alertes, '
+          'photos) seront definitivement supprimes. Cette action est '
+          'irreversible.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Supprimer definitivement'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    final alerts = context.read<AlertProvider>();
+    final friendAlerts = context.read<FriendAlertsProvider>();
+    final live = context.read<LiveLocationProvider>();
+    final friendLive = context.read<FriendLiveLocationProvider>();
+    final auth = context.read<AuthProvider>();
+    try {
+      await auth.deleteAccount();
+      alerts.reset();
+      friendAlerts.reset();
+      live.reset();
+      friendLive.reset();
+    } catch (_) {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Impossible de supprimer le compte. Reessayez.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
@@ -110,6 +155,16 @@ class SettingsTab extends StatelessWidget {
               onPressed: () => _logout(context),
               icon: const Icon(Icons.logout_rounded, size: 18),
               label: const Text('Deconnexion'),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+              onPressed: () => _confirmDelete(context),
+              icon: const Icon(Icons.delete_forever_rounded, size: 18),
+              label: const Text('Supprimer mon compte'),
             ),
           ),
           const SizedBox(height: 32),

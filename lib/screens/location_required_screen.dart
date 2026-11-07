@@ -247,10 +247,10 @@ class _NeedTile extends StatelessWidget {
     final needsSettings =
         status?.isPermanentlyDenied == true || status?.isRestricted == true;
     final buttonLabel = serviceOff
-        ? 'Activer la localisation'
+        ? 'Continuer'
         : needsSettings
         ? 'Ouvrir les parametres'
-        : 'Activer';
+        : 'Continuer';
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
