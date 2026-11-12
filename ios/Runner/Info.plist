@@ -22,6 +22,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -52,6 +54,11 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
@@ -60,8 +67,6 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Dronaid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Dronaid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Dronaid Security ouvre votre micro pendant une intervention acceptee pour que le repondant entende ce qui se passe.</string>
@@ -72,8 +77,6 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>
-		<true/>
-		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
 </dict>

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/auth_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/legal_links.dart';
 import '../widgets/primary_button.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   int _usernameCheckToken = 0;
   bool _checkingUsername = false;
   bool? _usernameAvailable;
+  bool _acceptedTerms = false;
 
   @override
   void dispose() {
@@ -78,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _submit(AuthProvider auth) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    if (_usernameAvailable == false) return;
+    if (_usernameAvailable == false || !_acceptedTerms) return;
     FocusScope.of(context).unfocus();
     final email = _emailCtrl.text.trim();
     final success = await auth.register(
@@ -283,11 +285,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      value: _acceptedTerms,
+                      onChanged: (v) =>
+                          setState(() => _acceptedTerms = v ?? false),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            const Text(
+                              "J'accepte les ",
+                              style: TextStyle(fontSize: 12.5),
+                            ),
+                            _LegalLink(
+                              label: "conditions d'utilisation",
+                              url: termsOfUseUrl,
+                            ),
+                            const Text(
+                              ' et la ',
+                              style: TextStyle(fontSize: 12.5),
+                            ),
+                            _LegalLink(
+                              label: 'politique de confidentialite',
+                              url: privacyPolicyUrl,
+                            ),
+                            const Text('.', style: TextStyle(fontSize: 12.5)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
                 PrimaryButton(
                   label: 'Creer mon compte',
                   loading: auth.loading,
-                  onPressed: _usernameAvailable == false
+                  onPressed: (_usernameAvailable == false || !_acceptedTerms)
                       ? null
                       : () => _submit(auth),
                 ),
@@ -295,6 +335,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LegalLink extends StatelessWidget {
+  const _LegalLink({required this.label, required this.url});
+
+  final String label;
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => openLegalUrl(context, url),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 12.5,
+          color: AppColors.brand400,
+          decoration: TextDecoration.underline,
         ),
       ),
     );

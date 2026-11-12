@@ -128,10 +128,10 @@ class _PermissionGateState extends State<PermissionGate>
         status?.isRestricted == true) {
       await _askSettings(need);
     } else {
-      status = await need.permission.request();
-      // Refus : le systeme ne redemandera plus (ou plus pour cette session),
-      // on guide donc l'utilisateur vers les reglages.
-      if (!status.isGranted && mounted) await _askSettings(need);
+      // Apple 5.1.1(iv) : apres un refus on ne redirige pas vers les reglages.
+      // L'ecran se met simplement a jour ; le bouton "Ouvrir les parametres"
+      // n'apparait que sur une action ulterieure de l'utilisateur.
+      await need.permission.request();
     }
     await _check();
   }

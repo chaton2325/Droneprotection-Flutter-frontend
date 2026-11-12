@@ -6,6 +6,7 @@ import '../state/friend_alerts_provider.dart';
 import '../state/friend_live_location_provider.dart';
 import '../state/live_location_provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/legal_links.dart';
 import '../widgets/avatar_upload_panel.dart';
 import '../widgets/dronaid_logo.dart';
 
@@ -142,7 +143,29 @@ class SettingsTab extends StatelessWidget {
               style: TextStyle(fontSize: 12.5),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 8),
+          const Divider(color: AppColors.surface2),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: const Text('Politique de confidentialite'),
+            trailing: const Icon(Icons.open_in_new_rounded, size: 16),
+            onTap: () => openLegalUrl(context, privacyPolicyUrl),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.description_outlined),
+            title: const Text("Conditions d'utilisation"),
+            trailing: const Icon(Icons.open_in_new_rounded, size: 16),
+            onTap: () => openLegalUrl(context, termsOfUseUrl),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.copyright_rounded),
+            title: const Text("Droits d'auteur"),
+            trailing: const Icon(Icons.open_in_new_rounded, size: 16),
+            onTap: () => openLegalUrl(context, copyrightUrl),
+          ),
           const Divider(color: AppColors.surface2),
           const SizedBox(height: 20),
           SizedBox(
