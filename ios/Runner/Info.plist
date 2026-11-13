@@ -68,6 +68,8 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Dronaid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Dronaid Security a besoin de votre position pour l'envoyer aux repondants lors d'une alerte d'urgence.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Dronaid Security ouvre votre micro pendant une intervention acceptee pour que le repondant entende ce qui se passe.</string>
 	<key>NSCameraUsageDescription</key>
